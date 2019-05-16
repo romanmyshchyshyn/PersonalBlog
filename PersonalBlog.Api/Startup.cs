@@ -36,6 +36,7 @@ namespace PersonalBlog.Api
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IRoleService, RoleService>();
             services.AddScoped<IUserRoleService, UserRoleService>();
+            services.AddScoped<IPostService, PostService>();
 
             services.AddAuthentication(options =>
             {

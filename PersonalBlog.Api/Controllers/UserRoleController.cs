@@ -5,7 +5,6 @@ using PersonalBlog.Services.Interfaces;
 
 namespace PersonalBlog.Api.Controllers
 {
-    [Produces("application/json")]
     [Route("api/[controller]")]
     public class UserRoleController : BaseController<UserRoleDto, UserRoleFilter>
     {

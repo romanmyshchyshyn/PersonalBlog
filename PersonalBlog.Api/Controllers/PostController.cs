@@ -6,9 +6,9 @@ using PersonalBlog.Services.Interfaces;
 namespace PersonalBlog.Api.Controllers
 {
     [Route("api/[controller]")]
-    public class RoleController : BaseController<RoleDto, RoleFilter>
+    public class PostController : BaseController<PostDto, PostFilter>
     {
-        public RoleController(IRoleService service)
+        public PostController(IPostService service)
             : base(service)
         {
         }
