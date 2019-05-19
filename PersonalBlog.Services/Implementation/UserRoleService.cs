@@ -54,10 +54,15 @@ namespace PersonalBlog.Services.Implementation
             _unitOfWork.SaveChanges();
         }
 
-        public override void Remove(UserRoleDto dto)
+        public override void Remove(string id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Remove(string userId, string roleId)
         {
             UserRole entity = Repository
-             .Get(u => u.UserId == dto.UserId && u.RoleId == dto.RoleId)
+             .Get(u => u.UserId == userId && u.RoleId == roleId)
              .SingleOrDefault();
 
             if (entity == null)

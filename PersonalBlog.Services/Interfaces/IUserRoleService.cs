@@ -5,5 +5,6 @@ namespace PersonalBlog.Services.Interfaces
 {
     public interface IUserRoleService : IService<UserRoleDto, UserRoleFilter>
     {
+        void Remove(string userId, string roleId);       
     }
 }

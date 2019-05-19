@@ -65,10 +65,10 @@ namespace PersonalBlog.Services.Implementation
             _unitOfWork.SaveChanges();
         }
 
-        public override void Remove(PostDto dto)
+        public override void Remove(string id)
         {
             Post entity = Repository
-             .Get(e => e.Id == dto.Id)
+             .Get(e => e.Id == id)
              .SingleOrDefault();
 
             if (entity == null)

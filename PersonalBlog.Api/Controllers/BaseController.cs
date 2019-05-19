@@ -87,9 +87,9 @@ namespace PersonalBlog.Api.Controllers
         }
 
         [HttpDelete("{id}")]
-        public virtual IActionResult Delete([FromBody] TDto dto)
+        public virtual IActionResult Delete(string id)
         {
-            _service.Remove(dto);
+            _service.Remove(id);
             return Ok();
         }
     }

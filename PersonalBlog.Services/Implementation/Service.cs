@@ -25,7 +25,7 @@ namespace PersonalBlog.Services.Implementation
         public abstract TDto Get(string id);
         public abstract IEnumerable<TDto> Get(TFilter filter);
         public abstract void Add(TDto dto);
-        public abstract void Remove(TDto dto);
+        public abstract void Remove(string id);
         public abstract void Update(TDto dto);
 
         public Expression<Func<TEntity, bool>> CombineExpressions(Expression<Func<TEntity, bool>> first, Expression<Func<TEntity, bool>> second)
