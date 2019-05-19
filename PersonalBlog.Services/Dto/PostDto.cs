@@ -17,10 +17,7 @@ namespace PersonalBlog.Services.Dto
         [JsonProperty("postedOn")]
         public DateTime PostedOn { get; set; }
 
-        [JsonProperty("content")]
-        public string Content { get; set; }
-
-        [JsonProperty("image")]
-        public string Image { get; set; }
+        [JsonProperty("article")]
+        public ArticleDto Article { get; set; }
     }
 }

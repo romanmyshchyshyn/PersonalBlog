@@ -12,6 +12,7 @@ namespace PersonalBlog.DataAccess
         public DbSet<Role> Roles { get; set; }
         public DbSet<UserRole> UserRole { get; set; }
         public DbSet<Post> Posts { get; set; }
+        public DbSet<Article> Articles { get; set; }
 
         public PersonalBlogContext(DbContextOptions<PersonalBlogContext> options) : 
             base(options)

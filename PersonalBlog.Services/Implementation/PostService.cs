@@ -1,4 +1,5 @@
-﻿using PersonalBlog.DataAccess.Interfaces;
+﻿using Microsoft.EntityFrameworkCore;
+using PersonalBlog.DataAccess.Interfaces;
 using PersonalBlog.DataAccess.Models;
 using PersonalBlog.Services.Dto;
 using PersonalBlog.Services.Exceptions;
@@ -22,6 +23,7 @@ namespace PersonalBlog.Services.Implementation
         {
             Post entity = Repository
               .Get(e => e.Id == id)
+              .Include(e => e.Article)
               .SingleOrDefault();
 
             if (entity == null)
@@ -82,6 +84,7 @@ namespace PersonalBlog.Services.Implementation
         {
             Post entity = Repository
                 .Get(e => e.Id == dto.Id)
+                .Include(e => e.Article)
                 .SingleOrDefault();
 
             if (entity == null)
@@ -92,8 +95,8 @@ namespace PersonalBlog.Services.Implementation
             entity.Title = dto.Title;
             entity.Description = dto.Description;
             entity.PostedOn = dto.PostedOn;
-            entity.Content = dto.Content;
-            entity.Image = dto.Image;
+            entity.Article.Content = dto.Article?.Content;
+            entity.Article.Image = dto.Article?.Image;
 
             Repository.Update(entity);
             _unitOfWork.SaveChanges();
@@ -112,9 +115,18 @@ namespace PersonalBlog.Services.Implementation
                 Title = entity.Title,
                 Description = entity.Description,
                 PostedOn = entity.PostedOn,
-                Content = entity.Content,
-                Image = entity.Image
+                Article = null                
             };
+
+            if (entity.Article != null)
+            {
+                dto.Article = new ArticleDto
+                {
+                    Id = entity.Article.Id,
+                    Content = entity.Article.Content,
+                    Image = entity.Article.Image
+                };
+            }
 
             return dto;
         }
@@ -132,9 +144,17 @@ namespace PersonalBlog.Services.Implementation
                 Title = dto.Title,
                 Description = dto.Description,
                 PostedOn = dto.PostedOn,
-                Content = dto.Content,
-                Image = dto.Image
             };
+
+            if (dto.Article != null)
+            {
+                entity.Article = new Article
+                {
+                    Id = dto.Article.Id,
+                    Content = dto.Article.Content,
+                    Image = dto.Article.Image
+                };
+            }
 
             return entity;
         }
