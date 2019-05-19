@@ -34,6 +34,11 @@ namespace PersonalBlog.DataAccess
                 .HasOne(ur => ur.Role)
                 .WithMany(r => r.UserRoles)
                 .HasForeignKey(ur => ur.RoleId);
+
+            modelBuilder.Entity<Article>()
+                .HasOne(a => a.Post)
+                .WithOne(p => p.Article)
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }
