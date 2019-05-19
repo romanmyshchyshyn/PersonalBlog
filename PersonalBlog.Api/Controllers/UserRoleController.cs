@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using PersonalBlog.Services.Dto;
 using PersonalBlog.Services.Filters;
 using PersonalBlog.Services.Interfaces;
@@ -15,13 +14,11 @@ namespace PersonalBlog.Api.Controllers
         {
         }
 
-        [AllowAnonymous]
         public override IActionResult Delete(string id)
         {
             throw new NotImplementedException();
         }
 
-        [AllowAnonymous]
         [HttpDelete]
         public IActionResult Delete([FromQuery] string userId, [FromQuery] string roleId)
         {
