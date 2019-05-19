@@ -24,7 +24,7 @@ namespace PersonalBlog.Api.Controllers
         }
 
         [HttpGet]
-        public virtual IActionResult Get(TFilter filter)
+        public virtual IActionResult Get([FromBody] TFilter filter)
         {
             var collection = _service.Get(filter);
             return Ok(collection);

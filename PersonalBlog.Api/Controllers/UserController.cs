@@ -10,7 +10,6 @@ using System.Threading.Tasks;
 
 namespace PersonalBlog.Api.Controllers
 {
-    [Produces("application/json")]
     [Route("api/[controller]")]
     public class UserController : BaseController<UserDto, UserFilter>
     {
