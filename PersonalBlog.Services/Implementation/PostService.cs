@@ -178,11 +178,6 @@ namespace PersonalBlog.Services.Implementation
                 result += e => e.Title == filter.Title;
             }
 
-            if (!String.IsNullOrEmpty(filter?.ByAllData))
-            {
-                result = e => e.Title.ToLower().Contains(filter.ByAllData.ToLower() ) || e.Description.ToLower().Contains(filter.ByAllData.ToLower());                    
-            }
-
             return result;
         }
     }

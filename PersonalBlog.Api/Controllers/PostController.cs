@@ -26,8 +26,8 @@ namespace PersonalBlog.Api.Controllers
             return base.Get(filter);
         }
 
-        [AllowAnonymous]
         [HttpGet]
+        [AllowAnonymous]
         [Route("search")]
         public IActionResult Search([FromQuery] string data)
         {
