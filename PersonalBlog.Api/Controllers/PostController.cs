@@ -21,9 +21,17 @@ namespace PersonalBlog.Api.Controllers
         }
 
         [AllowAnonymous]
-        public override IActionResult Get([FromBody] PostFilter filter)
+        public override IActionResult Get([FromQuery] PostFilter filter)
         {
             return base.Get(filter);
+        }
+
+        [AllowAnonymous]
+        [HttpGet]
+        [Route("search")]
+        public IActionResult Search([FromQuery] string data)
+        {
+            return Ok(((IPostService)_service).Search(data));
         }
     }
 }

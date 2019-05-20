@@ -6,5 +6,8 @@ namespace PersonalBlog.Services.Filters
     {
         [JsonProperty("title")]
         public string Title { get; set; }
+
+        [JsonProperty("byAllData")]
+        public string ByAllData { get; set; }
     }
 }

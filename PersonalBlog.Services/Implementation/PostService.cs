@@ -34,6 +34,17 @@ namespace PersonalBlog.Services.Implementation
             return MapToDto(entity);
         }
 
+        public IEnumerable<PostDto> Search(string data)
+        {
+            string dataToLower = data != null ? data.ToLower() : "";
+            List<Post> entities = Repository
+                .Get(e => e.Title.ToLower().Contains(dataToLower) || e.Description.ToLower().Contains(dataToLower) 
+                    || e.Article.Content.ToLower().Contains(dataToLower))
+                .ToList();
+
+            return entities.Select(e => MapToDto(e));
+        }
+
         public override IEnumerable<PostDto> Get(PostFilter filter)
         {
             Func<Post, bool> predicate = GetFilter(filter);
@@ -165,6 +176,11 @@ namespace PersonalBlog.Services.Implementation
             if (!String.IsNullOrEmpty(filter?.Title))
             {
                 result += e => e.Title == filter.Title;
+            }
+
+            if (!String.IsNullOrEmpty(filter?.ByAllData))
+            {
+                result = e => e.Title.ToLower().Contains(filter.ByAllData.ToLower() ) || e.Description.ToLower().Contains(filter.ByAllData.ToLower());                    
             }
 
             return result;
