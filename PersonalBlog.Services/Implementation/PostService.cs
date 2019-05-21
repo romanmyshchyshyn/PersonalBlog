@@ -36,11 +36,21 @@ namespace PersonalBlog.Services.Implementation
 
         public IEnumerable<PostDto> Search(string data)
         {
-            string dataToLower = data != null ? data.ToLower() : "";
-            List<Post> entities = Repository
-                .Get(e => e.Title.ToLower().Contains(dataToLower) || e.Description.ToLower().Contains(dataToLower) 
-                    || e.Article.Content.ToLower().Contains(dataToLower))
-                .ToList();
+            List<Post> entities;
+            if (data == null)
+            {
+                entities = Repository
+                    .Get()
+                    .ToList();
+            }
+            else
+            {
+                string dataToLower = data.ToLower();
+                entities = Repository
+                    .Get(e => e.Title.ToLower().Contains(dataToLower) || e.Description.ToLower().Contains(dataToLower)
+                        || e.Article.Content.ToLower().Contains(dataToLower))
+                    .ToList();
+            }
 
             return entities.Select(e => MapToDto(e));
         }
