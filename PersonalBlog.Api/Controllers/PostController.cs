@@ -3,15 +3,19 @@ using Microsoft.AspNetCore.Mvc;
 using PersonalBlog.Services.Dto;
 using PersonalBlog.Services.Filters;
 using PersonalBlog.Services.Interfaces;
+using System.Linq;
 
 namespace PersonalBlog.Api.Controllers
 {
     [Route("api/[controller]")]
     public class PostController : BaseController<PostDto, PostFilter>
     {
-        public PostController(IPostService service)
+        private readonly IEmailService _emailService;
+
+        public PostController(IPostService service, IEmailService emailService)
             : base(service)
         {
+            _emailService = emailService;
         }
 
         [AllowAnonymous]
@@ -24,6 +28,20 @@ namespace PersonalBlog.Api.Controllers
         public override IActionResult Get([FromQuery] PostFilter filter)
         {
             return base.Get(filter);
+        }
+
+        public override IActionResult Post([FromBody] PostDto dto)
+        {
+            var result = base.Post(dto);
+            var filter = new PostFilter
+            {
+                Title = dto.Title
+            };
+
+            var postId = _service.Get(filter).SingleOrDefault().Id;
+            _emailService.SendEmailsAboutNewPostAsync(dto.Title, dto.Description, postId);
+
+            return result;
         }
 
         [HttpGet]

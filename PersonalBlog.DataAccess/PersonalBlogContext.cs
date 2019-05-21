@@ -39,6 +39,9 @@ namespace PersonalBlog.DataAccess
                 .HasOne(a => a.Post)
                 .WithOne(p => p.Article)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<Post>()
+                .HasAlternateKey(p => p.Title);
         }
     }
 }
