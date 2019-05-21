@@ -5,6 +5,7 @@ using PersonalBlog.Services.Dto;
 using PersonalBlog.Services.Exceptions;
 using PersonalBlog.Services.Filters;
 using PersonalBlog.Services.Interfaces;
+using PersonalBlog.Services.Models;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -34,25 +35,35 @@ namespace PersonalBlog.Services.Implementation
             return MapToDto(entity);
         }
 
-        public IEnumerable<PostDto> Search(string data)
+        public PostSearchResult Search(string data, int pageIndex, int pageSize)
         {
-            List<Post> entities;
+            IQueryable<Post> query;
             if (data == null)
             {
-                entities = Repository
-                    .Get()
-                    .ToList();
+                query = Repository
+                    .Get();                    
             }
             else
             {
                 string dataToLower = data.ToLower();
-                entities = Repository
+                query = Repository
                     .Get(e => e.Title.ToLower().Contains(dataToLower) || e.Description.ToLower().Contains(dataToLower)
-                        || e.Article.Content.ToLower().Contains(dataToLower))
-                    .ToList();
+                        || e.Article.Content.ToLower().Contains(dataToLower));                
             }
 
-            return entities.Select(e => MapToDto(e));
+            int count = query.Count();
+            List<Post> entities = query
+                .Skip(pageIndex * pageSize)
+                .Take(pageSize)
+                .ToList();
+
+            PostSearchResult model = new PostSearchResult
+            {
+                Posts = entities.Select(e => MapToDto(e)),
+                Count = count
+            };
+
+            return model;
         }
 
         public override IEnumerable<PostDto> Get(PostFilter filter)

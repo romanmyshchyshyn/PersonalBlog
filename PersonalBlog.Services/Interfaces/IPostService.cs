@@ -1,11 +1,11 @@
 ﻿using PersonalBlog.Services.Dto;
 using PersonalBlog.Services.Filters;
-using System.Collections.Generic;
+using PersonalBlog.Services.Models;
 
 namespace PersonalBlog.Services.Interfaces
 {
     public interface IPostService : IService<PostDto, PostFilter>
     {
-        IEnumerable<PostDto> Search(string data);
+        PostSearchResult Search(string data, int pageIndex, int pageNumber);
     }
 }

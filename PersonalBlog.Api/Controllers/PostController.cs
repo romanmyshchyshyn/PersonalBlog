@@ -29,9 +29,9 @@ namespace PersonalBlog.Api.Controllers
         [HttpGet]
         [AllowAnonymous]
         [Route("search")]
-        public IActionResult Search([FromQuery] string data)
+        public IActionResult Search([FromQuery] string data, [FromQuery] int pageIndex, [FromQuery] int pageSize)
         {
-            return Ok(((IPostService)_service).Search(data));
+            return Ok(((IPostService)_service).Search(data, pageIndex, pageSize));
         }
     }
 }
