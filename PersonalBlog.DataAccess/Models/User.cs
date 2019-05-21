@@ -10,6 +10,7 @@ namespace PersonalBlog.DataAccess.Models
         public string Name { get; set; }
         public string PasswordHash { get; set; }
         public string Email { get; set; }
+        public bool IsSubscribed { get; set; }
 
         public List<UserRole> UserRoles { get; set; } = new List<UserRole>();
     }

@@ -23,6 +23,9 @@ namespace PersonalBlog.Services.Dto
         [JsonProperty("email")]
         public string Email { get; set; }
 
+        [JsonProperty("isSubscribed")]
+        public bool IsSubscribed { get; set; }
+
         public List<string> RoleNames { get; set; }
     }
 }

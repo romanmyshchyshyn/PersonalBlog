@@ -33,14 +33,22 @@ namespace PersonalBlog.Api.Controllers
 
             UserDto userDto = _userService.Get(model.Name, model.Password);
 
-            return Ok(GenerateToken(userDto));
+            SigninResult result = new SigninResult
+            {
+                Token = GenerateToken(userDto),
+                UserName = userDto.Name,
+                IsSubscribed = userDto.IsSubscribed
+            };
+
+            return Ok(result);
         }
 
         private List<Claim> GetClaims(UserDto userDto)
         {
             List<Claim> claims = new List<Claim>
             {
-                new Claim(ClaimTypes.Name, userDto.Name)
+                new Claim(ClaimTypes.Name, userDto.Name),
+                new Claim(ClaimTypes.NameIdentifier, userDto.Id)
             };
 
             foreach (var roleName in userDto.RoleNames)

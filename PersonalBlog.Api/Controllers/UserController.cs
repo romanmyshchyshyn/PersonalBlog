@@ -6,6 +6,7 @@ using PersonalBlog.Services.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace PersonalBlog.Api.Controllers
@@ -22,6 +23,14 @@ namespace PersonalBlog.Api.Controllers
         public override IActionResult Post([FromBody] UserDto dto)
         {
             return base.Post(dto);
+        }
+
+        [Route("subscribe")]
+        public IActionResult Subscribe([FromQuery] bool action)
+        {
+            string id = User.Claims.SingleOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value;
+            ((IUserService)_service).Subscribe(action, id);
+            return Ok();
         }
     }
 }

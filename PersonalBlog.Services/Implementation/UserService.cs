@@ -21,6 +21,22 @@ namespace PersonalBlog.Services.Implementation
         {
         }
 
+        public void Subscribe(bool action, string id)
+        {
+            User entity = Repository
+                .Get(e => e.Id == id)
+                .SingleOrDefault();
+
+            if (entity == null)
+            {
+                throw new ObjectNotFoundException();
+            }
+
+            entity.IsSubscribed = action;
+            Repository.Update(entity);
+            _unitOfWork.SaveChanges();
+        }
+
         public override UserDto Get(string id)
         {
             User entity = Repository
@@ -127,6 +143,7 @@ namespace PersonalBlog.Services.Implementation
             entity.Name = dto.Name;
             entity.PasswordHash = dto.PasswordHash;
             entity.Email = dto.Email;
+            entity.IsSubscribed = dto.IsSubscribed;
 
 
             Repository.Update(entity);
@@ -146,6 +163,7 @@ namespace PersonalBlog.Services.Implementation
                 Name = entity.Name,
                 PasswordHash = entity.PasswordHash,
                 Email = entity.Email,
+                IsSubscribed = entity.IsSubscribed,
                 RoleNames = entity.UserRoles.Select(ur => ur.Role.Name).ToList()
             };
 
@@ -164,7 +182,8 @@ namespace PersonalBlog.Services.Implementation
                 Id = dto.Id,
                 Name = dto.Name,
                 PasswordHash = dto.PasswordHash,
-                Email = dto.Email
+                Email = dto.Email,
+                IsSubscribed = dto.IsSubscribed
             };
 
             return entity;
