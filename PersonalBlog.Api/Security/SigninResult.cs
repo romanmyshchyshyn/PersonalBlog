@@ -1,8 +1,4 @@
 ﻿using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace PersonalBlog.Api.Security
 {
@@ -16,5 +12,8 @@ namespace PersonalBlog.Api.Security
 
         [JsonProperty("isSubscribed")]
         public bool IsSubscribed { get; set; }
+
+        [JsonProperty("isAdmin")]
+        public bool IsAdmin { get; set; }
     }
 }

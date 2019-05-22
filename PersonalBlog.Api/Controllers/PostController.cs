@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using PersonalBlog.Api.Security;
 using PersonalBlog.Services.Dto;
 using PersonalBlog.Services.Filters;
 using PersonalBlog.Services.Interfaces;
@@ -30,6 +31,7 @@ namespace PersonalBlog.Api.Controllers
             return base.Get(filter);
         }
 
+        [Authorize(Roles = Role.Admin)]
         public override IActionResult Post([FromBody] PostDto dto)
         {
             var result = base.Post(dto);
@@ -50,6 +52,18 @@ namespace PersonalBlog.Api.Controllers
         public IActionResult Search([FromQuery] string data, [FromQuery] int pageIndex, [FromQuery] int pageSize)
         {
             return Ok(((IPostService)_service).Search(data, pageIndex, pageSize));
+        }
+
+        [Authorize(Roles = Role.Admin)]
+        public override IActionResult Put([FromBody] PostDto dto)
+        {
+            return base.Put(dto);
+        }
+
+        [Authorize(Roles = Role.Admin)]
+        public override IActionResult Delete(string id)
+        {
+            return base.Delete(id);
         }
     }
 }

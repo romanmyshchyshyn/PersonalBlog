@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using PersonalBlog.Api.Security;
 using PersonalBlog.Services.Dto;
 using PersonalBlog.Services.Filters;
 using PersonalBlog.Services.Interfaces;
@@ -19,6 +20,18 @@ namespace PersonalBlog.Api.Controllers
         {
         }
 
+        [Authorize(Roles = Role.Admin)]
+        public override IActionResult Get(string id)
+        {
+            return base.Get(id);
+        }
+
+        [Authorize(Roles = Role.Admin)]
+        public override IActionResult Get(UserFilter filter)
+        {
+            return base.Get(filter);
+        }
+
         [AllowAnonymous]
         public override IActionResult Post([FromBody] UserDto dto)
         {
@@ -31,6 +44,12 @@ namespace PersonalBlog.Api.Controllers
             string id = User.Claims.SingleOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value;
             ((IUserService)_service).Subscribe(action, id);
             return Ok();
+        }
+
+        [Authorize(Roles = Role.Admin)]
+        public override IActionResult Delete(string id)
+        {
+            return base.Delete(id);
         }
     }
 }

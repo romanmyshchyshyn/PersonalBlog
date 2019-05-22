@@ -23,7 +23,6 @@ namespace PersonalBlog.Api.Controllers
             _userService = userService;
         }
 
-        // POST api/<controller>
         [HttpPost]
         public IActionResult Post([FromBody]LoginModel model)
         {
@@ -38,7 +37,8 @@ namespace PersonalBlog.Api.Controllers
             {
                 Token = GenerateToken(userDto),
                 UserName = userDto.Name,
-                IsSubscribed = userDto.IsSubscribed
+                IsSubscribed = userDto.IsSubscribed,
+                IsAdmin = userDto.RoleNames.Contains(Role.Admin)
             };
 
             return Ok(result);

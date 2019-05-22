@@ -30,20 +30,6 @@ namespace PersonalBlog.Api.Controllers
             return Ok(collection);
         }
 
-        [HttpHead("{id}")]
-        public virtual IActionResult Head(string id)
-        {
-            var value = _service.Get(id);
-            return Ok();
-        }
-
-        [HttpHead]
-        public virtual IActionResult Head(TFilter filter)
-        {
-            var collection = _service.Get(filter);
-            return Ok();
-        }
-
         [HttpPost]
         public virtual IActionResult Post([FromBody]TDto dto)
         {
@@ -60,20 +46,6 @@ namespace PersonalBlog.Api.Controllers
 
         [HttpPut]
         public virtual IActionResult Put([FromBody]TDto dto)
-        {
-            if (ModelState.IsValid)
-            {
-                _service.Update(dto);
-                return Ok();
-            }
-            else
-            {
-                return BadRequest();
-            }
-        }
-
-        [HttpPatch]
-        public virtual IActionResult Patch([FromBody]TDto dto)
         {
             if (ModelState.IsValid)
             {

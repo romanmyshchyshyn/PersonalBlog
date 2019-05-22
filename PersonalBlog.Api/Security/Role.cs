@@ -1,8 +1,8 @@
 ﻿namespace PersonalBlog.Api.Security
 {
-    public static class Role
+    internal static class Role
     {
-        public static readonly string Admin = "Admin";
-        public static readonly string User = "User";
+        internal const string Admin = "Admin";
+        internal const string User = "User";
     }
 }

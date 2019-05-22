@@ -73,6 +73,8 @@ namespace PersonalBlog.Services.Implementation
             string hashPassword = GetHash(password);
             User entity = Repository
                 .Get(u => u.Name == name && hashPassword == u.PasswordHash)
+                .Include(u => u.UserRoles)
+                .ThenInclude(ur => ur.Role)
                 .SingleOrDefault();
 
             if (entity == null)
