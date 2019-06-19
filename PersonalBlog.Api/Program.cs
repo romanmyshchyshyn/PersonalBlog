@@ -6,7 +6,10 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using PersonalBlog.Api.Initializers;
+using PersonalBlog.Services.Interfaces;
 
 namespace PersonalBlog.Api
 {
@@ -14,7 +17,21 @@ namespace PersonalBlog.Api
     {
         public static void Main(string[] args)
         {
-            CreateWebHostBuilder(args).Build().Run();
+            var host = CreateWebHostBuilder(args).Build();
+
+            using (var scope = host.Services.CreateScope())
+            {
+                var services = scope.ServiceProvider;
+
+                var configuration = services.GetRequiredService<IConfiguration>();
+                var userService = services.GetRequiredService<IUserService>();
+                var roleService = services.GetRequiredService<IRoleService>();
+                var userRoleService = services.GetRequiredService<IUserRoleService>();
+
+                RoleInitializer.Initialize(configuration, userService, roleService, userRoleService);
+            }
+
+            host.Run();
         }
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>

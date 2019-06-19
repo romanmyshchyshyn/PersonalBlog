@@ -42,6 +42,9 @@ namespace PersonalBlog.DataAccess
 
             modelBuilder.Entity<Post>()
                 .HasAlternateKey(p => p.Title);
+
+            modelBuilder.Entity<Role>()
+                .HasAlternateKey(r => r.Name);
         }
     }
 }
