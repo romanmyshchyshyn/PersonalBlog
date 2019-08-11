@@ -4,6 +4,7 @@ using PersonalBlog.Api.Security;
 using PersonalBlog.Services.Dto;
 using PersonalBlog.Services.Filters;
 using PersonalBlog.Services.Interfaces;
+using System;
 using System.Linq;
 
 namespace PersonalBlog.Api.Controllers
@@ -22,7 +23,13 @@ namespace PersonalBlog.Api.Controllers
         [AllowAnonymous]
         public override IActionResult Get(string id)
         {
-            return base.Get(id);
+            throw new NotImplementedException();
+        }
+
+        [AllowAnonymous]
+        public IActionResult Get(string id, string userId = null)
+        {
+            return Ok(((IPostService)_service).Get(id, userId));
         }
 
         [AllowAnonymous]
@@ -49,9 +56,9 @@ namespace PersonalBlog.Api.Controllers
         [HttpGet]
         [AllowAnonymous]
         [Route("search")]
-        public IActionResult Search([FromQuery] string data, [FromQuery] int pageIndex, [FromQuery] int pageSize)
+        public IActionResult Search([FromQuery] PostSearchOptions postSearch)
         {
-            return Ok(((IPostService)_service).Search(data, pageIndex, pageSize));
+            return Ok(((IPostService)_service).Search(postSearch));
         }
 
         [Authorize(Roles = Role.Admin)]

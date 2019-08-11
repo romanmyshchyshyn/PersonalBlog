@@ -36,6 +36,7 @@ namespace PersonalBlog.Api.Controllers
             SigninResult result = new SigninResult
             {
                 Token = GenerateToken(userDto),
+                UserId = userDto.Id,
                 UserName = userDto.Name,
                 IsSubscribed = userDto.IsSubscribed,
                 IsAdmin = userDto.RoleNames.Contains(Role.Admin)

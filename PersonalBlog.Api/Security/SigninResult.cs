@@ -7,6 +7,9 @@ namespace PersonalBlog.Api.Security
         [JsonProperty("token")]
         public string Token { get; set; }
 
+        [JsonProperty("userId")]
+        public string UserId { get; set; }
+
         [JsonProperty("userName")]
         public string UserName { get; set; }
 

@@ -22,44 +22,86 @@ namespace PersonalBlog.Services.Implementation
 
         public override PostDto Get(string id)
         {
-            Post entity = Repository
-              .Get(e => e.Id == id)
-              .Include(e => e.Article)
-              .SingleOrDefault();
-
-            if (entity == null)
-            {
-                throw new ObjectNotFoundException();
-            }
-
-            return MapToDto(entity);
+            throw new NotImplementedException();
         }
 
-        public PostSearchResult Search(string data, int pageIndex, int pageSize)
+        public PostDto Get(string id, string userId = null)
+        {
+            PostDto dto = Repository
+              .Get(e => e.Id == id)
+              .Select(e => new PostDto
+              {
+                  Id = e.Id,
+                  Title = e.Title,
+                  Description = e.Description,
+                  PostedOn = e.PostedOn,
+                  Article = new ArticleDto
+                  {
+                      Id = e.Article.Id,
+                      Content = e.Article.Content,
+                      Image = e.Article.Image
+
+                  },
+                  GlobalRateValue = e.Rates.Average(r => r.Value),
+                  UserRate = e.Rates
+                        .Where(r => r.UserId == userId)
+                        .Select(r => new RateDto
+                        {
+                            Id = r.Id,
+                            Value = r.Value,
+                            UserId = r.UserId,
+                            PostId = r.PostId
+                        })
+                        .SingleOrDefault()
+              })
+              .SingleOrDefault();            
+
+            return dto;
+        }
+
+        public PostSearchResult Search(PostSearchOptions postSearch)
         {
             IQueryable<Post> query;
-            if (data == null)
+            if (postSearch.Data == null)
             {
                 query = Repository
-                    .Get();                    
+                    .Get();
             }
             else
             {
-                string dataToLower = data.ToLower();
+                string dataToLower = postSearch.Data.ToLower();
                 query = Repository
                     .Get(e => e.Title.ToLower().Contains(dataToLower) || e.Description.ToLower().Contains(dataToLower)
-                        || e.Article.Content.ToLower().Contains(dataToLower));                
+                        || e.Article.Content.ToLower().Contains(dataToLower));
             }
 
             int count = query.Count();
-            List<Post> entities = query
-                .Skip(pageIndex * pageSize)
-                .Take(pageSize)
+            List<PostDto> posts = query
+                .Skip(postSearch.PageIndex * postSearch.PageSize)
+                .Take(postSearch.PageSize)
+                .Select(e => new PostDto
+                {
+                    Id = e.Id,
+                    Title = e.Title,
+                    Description = e.Description,
+                    PostedOn = e.PostedOn,
+                    GlobalRateValue = e.Rates.Any() ? e.Rates.Average(r => r.Value) : 0,
+                    UserRate = e.Rates
+                        .Where(r => r.UserId == postSearch.UserId)
+                        .Select(r => new RateDto
+                        {
+                            Id = r.Id,
+                            Value = r.Value,
+                            PostId = r.PostId,
+                            UserId = r.UserId
+                        })
+                        .SingleOrDefault()
+                })
                 .ToList();
 
             PostSearchResult model = new PostSearchResult
             {
-                Posts = entities.Select(e => MapToDto(e)),
+                Posts = posts,
                 Count = count
             };
 
@@ -147,7 +189,7 @@ namespace PersonalBlog.Services.Implementation
                 Title = entity.Title,
                 Description = entity.Description,
                 PostedOn = entity.PostedOn,
-                Article = null                
+                Article = null
             };
 
             if (entity.Article != null)

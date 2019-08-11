@@ -13,5 +13,6 @@ namespace PersonalBlog.DataAccess.Models
         public bool IsSubscribed { get; set; }
 
         public List<UserRole> UserRoles { get; set; } = new List<UserRole>();
+        public List<Rate> Rates { get; set; } = new List<Rate>();
     }
 }

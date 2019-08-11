@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace PersonalBlog.DataAccess.Models
 {
@@ -10,5 +11,6 @@ namespace PersonalBlog.DataAccess.Models
         public DateTime PostedOn { get; set; }
 
         public Article Article { get; set; }
+        public List<Rate> Rates { get; set; } = new List<Rate>();
     }
 }

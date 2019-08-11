@@ -19,5 +19,11 @@ namespace PersonalBlog.Services.Dto
 
         [JsonProperty("article")]
         public ArticleDto Article { get; set; }
+
+        [JsonProperty("globalRateValue")]
+        public double GlobalRateValue { get; set; }
+
+        [JsonProperty("userRate")]
+        public RateDto UserRate { get; set; }
     }
 }

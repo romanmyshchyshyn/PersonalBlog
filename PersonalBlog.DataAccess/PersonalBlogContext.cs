@@ -1,8 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PersonalBlog.DataAccess.Models;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace PersonalBlog.DataAccess
 {
@@ -13,11 +10,12 @@ namespace PersonalBlog.DataAccess
         public DbSet<UserRole> UserRole { get; set; }
         public DbSet<Post> Posts { get; set; }
         public DbSet<Article> Articles { get; set; }
+        public DbSet<Rate> Rates { get; set; }
 
         public PersonalBlogContext(DbContextOptions<PersonalBlogContext> options) : 
             base(options)
         {
-            Database.EnsureCreated();
+            //Database.EnsureCreated();
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
