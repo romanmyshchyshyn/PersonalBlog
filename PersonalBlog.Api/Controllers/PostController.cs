@@ -21,24 +21,21 @@ namespace PersonalBlog.Api.Controllers
         }
 
         [AllowAnonymous]
+        [HttpGet("{id}")]
         public override IActionResult Get(string id)
         {
-            throw new NotImplementedException();
-        }
-
-        [AllowAnonymous]
-        public IActionResult Get(string id, string userId = null)
-        {
+            var userId = Request.Query["userId"];
             return Ok(((IPostService)_service).Get(id, userId));
         }
 
         [AllowAnonymous]
-        public override IActionResult Get([FromQuery] PostFilter filter)
+        public override IActionResult Get(PostFilter filter)
         {
             return base.Get(filter);
         }
 
         [Authorize(Roles = Role.Admin)]
+        [HttpPost]
         public override IActionResult Post([FromBody] PostDto dto)
         {
             var result = base.Post(dto);
@@ -62,12 +59,14 @@ namespace PersonalBlog.Api.Controllers
         }
 
         [Authorize(Roles = Role.Admin)]
+        [HttpPut]
         public override IActionResult Put([FromBody] PostDto dto)
         {
             return base.Put(dto);
         }
 
         [Authorize(Roles = Role.Admin)]
+        [HttpDelete]
         public override IActionResult Delete(string id)
         {
             return base.Delete(id);
