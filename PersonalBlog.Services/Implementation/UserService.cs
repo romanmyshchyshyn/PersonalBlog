@@ -4,6 +4,7 @@ using PersonalBlog.DataAccess.Models;
 using PersonalBlog.Services.Dto;
 using PersonalBlog.Services.Exceptions;
 using PersonalBlog.Services.Filters;
+using PersonalBlog.Services.Helpers;
 using PersonalBlog.Services.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -70,7 +71,7 @@ namespace PersonalBlog.Services.Implementation
 
         public UserDto Get(string name, string password)
         {
-            string hashPassword = GetHash(password);
+            string hashPassword = UserHelper.GetPasswordHash(password);
             User entity = Repository
                 .Get(u => u.Name == name && hashPassword == u.PasswordHash)
                 .Include(u => u.UserRoles)
@@ -85,20 +86,6 @@ namespace PersonalBlog.Services.Implementation
             return MapToDto(entity);
         }
 
-        private string GetHash(string input)
-        {
-            MD5 md5Hash = MD5.Create();
-
-            byte[] data = md5Hash.ComputeHash(Encoding.UTF8.GetBytes(input));
-            StringBuilder hash = new StringBuilder();
-            for (int i = 0; i < data.Length; i++)
-            {
-                hash.Append(data[i].ToString("x2"));
-            }
-
-            return hash.ToString();
-        }
-
         public override void Add(UserDto dto)
         {
             User checkEntity = Repository
@@ -110,7 +97,7 @@ namespace PersonalBlog.Services.Implementation
                 throw new DuplicateNameException();
             }
 
-            dto.PasswordHash = GetHash(dto.Password);
+            dto.PasswordHash = UserHelper.GetPasswordHash(dto.Password);
             User entity = MapToEntity(dto);
             Repository.Add(entity);
             _unitOfWork.SaveChanges();

@@ -9,6 +9,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using PersonalBlog.Api.Initializers;
+using PersonalBlog.DataAccess.Interfaces;
+using PersonalBlog.DataAccess.Models;
 using PersonalBlog.Services.Interfaces;
 
 namespace PersonalBlog.Api
@@ -24,10 +26,14 @@ namespace PersonalBlog.Api
                 var services = scope.ServiceProvider;
 
                 var configuration = services.GetRequiredService<IConfiguration>();
+                
+                var unitOfWork = services.GetRequiredService<IUnitOfWork>();
+
                 var userService = services.GetRequiredService<IUserService>();
                 var roleService = services.GetRequiredService<IRoleService>();
                 var userRoleService = services.GetRequiredService<IUserRoleService>();
 
+                DataInitializer.Initialize(unitOfWork, configuration);
                 RoleInitializer.Initialize(configuration, userService, roleService, userRoleService);
             }
 
