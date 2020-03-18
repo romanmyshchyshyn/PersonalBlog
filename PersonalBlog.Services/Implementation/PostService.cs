@@ -25,7 +25,7 @@ namespace PersonalBlog.Services.Implementation
             throw new NotImplementedException();
         }
 
-        public PostDto Get(string id, string userId = null)
+        public PostDto Get(string id, string userId)
         {
             PostDto dto = Repository
               .Get(e => e.Id == id)
@@ -42,7 +42,7 @@ namespace PersonalBlog.Services.Implementation
                       Image = e.Article.Image
 
                   },
-                  GlobalRateValue = e.Rates.Average(r => r.Value),
+                  GlobalRateValue = e.Rates.Any() ? e.Rates.Average(r => r.Value) : 0,
                   UserRate = e.Rates
                         .Where(r => r.UserId == userId)
                         .Select(r => new RateDto
@@ -52,7 +52,7 @@ namespace PersonalBlog.Services.Implementation
                             UserId = r.UserId,
                             PostId = r.PostId
                         })
-                        .SingleOrDefault()
+                        .FirstOrDefault()
               })
               .SingleOrDefault();            
 
