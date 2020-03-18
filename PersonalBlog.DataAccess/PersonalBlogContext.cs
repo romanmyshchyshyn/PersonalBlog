@@ -24,9 +24,9 @@ namespace PersonalBlog.DataAccess
                 .HasKey(ur => new { ur.UserId, ur.RoleId });
 
             modelBuilder.Entity<UserRole>()
-            .HasOne(ur => ur.User)
-            .WithMany(u => u.UserRoles)
-            .HasForeignKey(ur => ur.UserId);
+                .HasOne(ur => ur.User)
+                .WithMany(u => u.UserRoles)
+                .HasForeignKey(ur => ur.UserId);
 
             modelBuilder.Entity<UserRole>()
                 .HasOne(ur => ur.Role)
@@ -43,6 +43,11 @@ namespace PersonalBlog.DataAccess
 
             modelBuilder.Entity<Role>()
                 .HasAlternateKey(r => r.Name);
+
+            modelBuilder.Entity<Rate>()
+                .HasOne(r => r.Post)
+                .WithMany(p => p.Rates)
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

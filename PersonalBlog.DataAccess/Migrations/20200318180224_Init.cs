@@ -87,7 +87,7 @@ namespace PersonalBlog.DataAccess.Migrations
                         column: x => x.PostId,
                         principalTable: "Posts",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Rates_Users_UserId",
                         column: x => x.UserId,

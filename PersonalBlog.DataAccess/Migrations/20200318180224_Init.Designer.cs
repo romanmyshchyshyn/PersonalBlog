@@ -10,14 +10,14 @@ using PersonalBlog.DataAccess;
 namespace PersonalBlog.DataAccess.Migrations
 {
     [DbContext(typeof(PersonalBlogContext))]
-    [Migration("20190807031724_Init")]
+    [Migration("20200318180224_Init")]
     partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.1.11-servicing-32099")
+                .HasAnnotation("ProductVersion", "2.1.14-servicing-32113")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -138,7 +138,8 @@ namespace PersonalBlog.DataAccess.Migrations
                 {
                     b.HasOne("PersonalBlog.DataAccess.Models.Post", "Post")
                         .WithMany("Rates")
-                        .HasForeignKey("PostId");
+                        .HasForeignKey("PostId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("PersonalBlog.DataAccess.Models.User", "User")
                         .WithMany("Rates")
