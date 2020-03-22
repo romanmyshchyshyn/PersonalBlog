@@ -10,8 +10,8 @@ using PersonalBlog.DataAccess;
 namespace PersonalBlog.DataAccess.Migrations
 {
     [DbContext(typeof(PersonalBlogContext))]
-    [Migration("20200318180224_Init")]
-    partial class Init
+    [Migration("20200322102811_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -47,6 +47,8 @@ namespace PersonalBlog.DataAccess.Migrations
                         .ValueGeneratedOnAdd();
 
                     b.Property<string>("Description");
+
+                    b.Property<string>("Features");
 
                     b.Property<DateTime>("PostedOn");
 
@@ -107,6 +109,8 @@ namespace PersonalBlog.DataAccess.Migrations
                     b.Property<string>("Name");
 
                     b.Property<string>("PasswordHash");
+
+                    b.Property<string>("Weights");
 
                     b.HasKey("Id");
 

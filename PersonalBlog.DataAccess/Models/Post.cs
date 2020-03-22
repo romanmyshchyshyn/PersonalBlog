@@ -10,6 +10,8 @@ namespace PersonalBlog.DataAccess.Models
         public string Description { get; set; }
         public DateTime PostedOn { get; set; }
 
+        public double[] Features { get; set; }
+
         public Article Article { get; set; }
         public List<Rate> Rates { get; set; } = new List<Rate>();
     }

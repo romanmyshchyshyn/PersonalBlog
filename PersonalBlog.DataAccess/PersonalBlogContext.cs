@@ -1,5 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PersonalBlog.DataAccess.Models;
+using System;
+using System.Linq;
 
 namespace PersonalBlog.DataAccess
 {
@@ -48,6 +51,18 @@ namespace PersonalBlog.DataAccess
                 .HasOne(r => r.Post)
                 .WithMany(p => p.Rates)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            var doubleArrayToStringConverter = new ValueConverter<double[], string>(
+                v => string.Join(";", v),
+                v => v.Split(';').Select(val => double.Parse(val)).ToArray());
+
+            modelBuilder.Entity<User>()
+                .Property(u => u.Weights)
+                .HasConversion(doubleArrayToStringConverter);
+
+            modelBuilder.Entity<Post>()
+                .Property(u => u.Features)
+                .HasConversion(doubleArrayToStringConverter);
         }
     }
 }

@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace PersonalBlog.DataAccess.Migrations
 {
-    public partial class Init : Migration
+    public partial class Initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -14,7 +14,8 @@ namespace PersonalBlog.DataAccess.Migrations
                     Id = table.Column<string>(nullable: false),
                     Title = table.Column<string>(nullable: false),
                     Description = table.Column<string>(nullable: true),
-                    PostedOn = table.Column<DateTime>(nullable: false)
+                    PostedOn = table.Column<DateTime>(nullable: false),
+                    Features = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -43,7 +44,8 @@ namespace PersonalBlog.DataAccess.Migrations
                     Name = table.Column<string>(nullable: true),
                     PasswordHash = table.Column<string>(nullable: true),
                     Email = table.Column<string>(nullable: true),
-                    IsSubscribed = table.Column<bool>(nullable: false)
+                    IsSubscribed = table.Column<bool>(nullable: false),
+                    Weights = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {

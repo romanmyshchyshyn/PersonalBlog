@@ -46,6 +46,8 @@ namespace PersonalBlog.DataAccess.Migrations
 
                     b.Property<string>("Description");
 
+                    b.Property<string>("Features");
+
                     b.Property<DateTime>("PostedOn");
 
                     b.Property<string>("Title")
@@ -105,6 +107,8 @@ namespace PersonalBlog.DataAccess.Migrations
                     b.Property<string>("Name");
 
                     b.Property<string>("PasswordHash");
+
+                    b.Property<string>("Weights");
 
                     b.HasKey("Id");
 

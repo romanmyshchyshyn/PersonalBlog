@@ -23,7 +23,13 @@ namespace PersonalBlog.Api.Initializers
                 return;
             }
 
-            var postsDataPath = configuration["Data:Posts"];
+            var trainedDataPath = configuration["Data:TrainedDataPath"];
+            var trainedDataReader = new MatFileReader(trainedDataPath);
+            var featuresVariable = configuration["Data:TrainedDataFeaturesVariable"];
+            var mlFeatures = trainedDataReader.Content[featuresVariable] as MLDouble;
+            double[][] features = mlFeatures.GetArray();
+
+            var postsDataPath = configuration["Data:PostsPath"];
             var postsData = File.ReadAllLines(postsDataPath);
             var posts = new List<Post>(postsData.Count());
             for (int i = 0; i < postsData.Count(); i++)
@@ -32,7 +38,8 @@ namespace PersonalBlog.Api.Initializers
                 {
                     Id = i.ToString(),
                     Title = postsData[i],
-                    PostedOn = DateTime.Now
+                    PostedOn = DateTime.Now,
+                    Features = features[i].ToArray()
                 };
 
                 posts.Add(post);
@@ -41,11 +48,16 @@ namespace PersonalBlog.Api.Initializers
             postRepository.Add(posts);
             unitOfWork.SaveChanges();
 
-            var usersRatingsDataPath = configuration["Data:UsersRatings"];
-            var usersRaringsDataVariableName = configuration["Data:UsersRatingsVariableName"];
-            var matFileReader = new MatFileReader(usersRatingsDataPath);
-            var mlUsersRaringsData = matFileReader.Content[usersRaringsDataVariableName] as MLDouble;
+            var usersRatingsDataPath = configuration["Data:UsersRatingsPath"];            
+            var userRatingsDataReader = new MatFileReader(usersRatingsDataPath);
+            var usersRaringsDataVariable = configuration["Data:UsersRatingsVariable"];
+            var mlUsersRaringsData = userRatingsDataReader.Content[usersRaringsDataVariable] as MLDouble;
             double[][] usersRatingsData = mlUsersRaringsData.GetArray();
+
+            var weightsVariable = configuration["Data:TrainedDataWeightsVariable"];
+            var mlWeights = trainedDataReader.Content[weightsVariable] as MLDouble;
+            double[][] weights = mlWeights.GetArray();
+
             var users = new List<User>(usersRatingsData[0].Count());
             for (int i = 0; i < usersRatingsData[0].Count(); i++)
             {
@@ -71,7 +83,8 @@ namespace PersonalBlog.Api.Initializers
                     Email = userEmail,
                     PasswordHash = passwordHash,
                     IsSubscribed = false,
-                    Rates = rates
+                    Rates = rates,
+                    Weights = weights[i].ToArray()
                 };
 
                 users.Add(user);

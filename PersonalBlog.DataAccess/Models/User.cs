@@ -12,6 +12,8 @@ namespace PersonalBlog.DataAccess.Models
         public string Email { get; set; }
         public bool IsSubscribed { get; set; }
 
+        public double[] Weights { get; set; }
+
         public List<UserRole> UserRoles { get; set; } = new List<UserRole>();
         public List<Rate> Rates { get; set; } = new List<Rate>();
     }
