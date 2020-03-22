@@ -50,9 +50,14 @@ namespace PersonalBlog.Api.Initializers
 
             var usersRatingsDataPath = configuration["Data:UsersRatingsPath"];            
             var userRatingsDataReader = new MatFileReader(usersRatingsDataPath);
-            var usersRaringsDataVariable = configuration["Data:UsersRatingsVariable"];
-            var mlUsersRaringsData = userRatingsDataReader.Content[usersRaringsDataVariable] as MLDouble;
+
+            var usersRatingsDataVariable = configuration["Data:UsersRatingsVariable"];
+            var mlUsersRaringsData = userRatingsDataReader.Content[usersRatingsDataVariable] as MLDouble;
             double[][] usersRatingsData = mlUsersRaringsData.GetArray();
+
+            var isRatedMatrixVariable = configuration["Data:IsRatedMatrixVariable"];
+            var mlIsRatedMatrix = userRatingsDataReader.Content[isRatedMatrixVariable] as MLUInt8;
+            byte[][] isRatedMatrix = mlIsRatedMatrix.GetArray();
 
             var weightsVariable = configuration["Data:TrainedDataWeightsVariable"];
             var mlWeights = trainedDataReader.Content[weightsVariable] as MLDouble;
@@ -68,6 +73,11 @@ namespace PersonalBlog.Api.Initializers
                 var rates = new List<Rate>(usersRatingsData.Count());
                 for (int j = 0; j < usersRatingsData.Count(); j++)
                 {
+                    if (isRatedMatrix[j][i] == 0)
+                    {
+                        continue;
+                    }
+
                     var rate = new Rate
                     {
                         PostId = j.ToString(),

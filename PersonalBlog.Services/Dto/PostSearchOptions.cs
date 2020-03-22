@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using PersonalBlog.Services.Enums;
 
 namespace PersonalBlog.Services.Dto
 {
@@ -15,5 +16,8 @@ namespace PersonalBlog.Services.Dto
 
         [JsonProperty("userId")]
         public string UserId { get; set; }
+
+        [JsonProperty("searchType")]
+        public SearchType SearchType { get; set; }
     }
 }

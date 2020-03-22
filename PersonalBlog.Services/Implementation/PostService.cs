@@ -2,6 +2,7 @@
 using PersonalBlog.DataAccess.Interfaces;
 using PersonalBlog.DataAccess.Models;
 using PersonalBlog.Services.Dto;
+using PersonalBlog.Services.Enums;
 using PersonalBlog.Services.Exceptions;
 using PersonalBlog.Services.Filters;
 using PersonalBlog.Services.Interfaces;
@@ -59,26 +60,46 @@ namespace PersonalBlog.Services.Implementation
             return dto;
         }
 
-        public PostSearchResult Search(PostSearchOptions postSearch)
+        public PostSearchResult Search(PostSearchOptions postSearchOptions)
         {
             IQueryable<Post> query;
-            if (postSearch.Data == null)
+            if (postSearchOptions.Data == null)
             {
                 query = Repository
                     .Get();
             }
             else
             {
-                string dataToLower = postSearch.Data.ToLower();
+                string dataToLower = postSearchOptions.Data.ToLower();
                 query = Repository
                     .Get(e => e.Title.ToLower().Contains(dataToLower) || e.Description.ToLower().Contains(dataToLower)
                         || e.Article.Content.ToLower().Contains(dataToLower));
             }
 
+            if (postSearchOptions.SearchType == SearchType.Recommended)
+            {
+                var userRepostiory = _unitOfWork.GetRepository<User>();
+                var userWeights = userRepostiory.Get(u => u.Id == postSearchOptions.UserId)
+                    .Select(u => u.Weights)
+                    .SingleOrDefault();
+
+                var notRatedByUserPosts = query.Where(p => p.Features.Any() && !p.Rates.Any(r => r.UserId == postSearchOptions.UserId))
+                    .Select(p => new { Id = p.Id, Features = p.Features })
+                    .ToList();
+
+                var recommendedPostsNumber = 10;
+                var recommendedPostsIds = notRatedByUserPosts.OrderByDescending(p => p.Features.Zip(userWeights, (f, w) => f * w).Sum())
+                    .Take(recommendedPostsNumber)
+                    .Select(p => p.Id)
+                    .ToList();
+
+                query = query.Where(p => recommendedPostsIds.Contains(p.Id));
+            }
+
             int count = query.Count();
             List<PostDto> posts = query
-                .Skip(postSearch.PageIndex * postSearch.PageSize)
-                .Take(postSearch.PageSize)
+                .Skip(postSearchOptions.PageIndex * postSearchOptions.PageSize)
+                .Take(postSearchOptions.PageSize)
                 .Select(e => new PostDto
                 {
                     Id = e.Id,
@@ -87,7 +108,7 @@ namespace PersonalBlog.Services.Implementation
                     PostedOn = e.PostedOn,
                     GlobalRateValue = e.Rates.Any() ? e.Rates.Average(r => r.Value) : 0,
                     UserRate = e.Rates
-                        .Where(r => r.UserId == postSearch.UserId)
+                        .Where(r => r.UserId == postSearchOptions.UserId)
                         .Select(r => new RateDto
                         {
                             Id = r.Id,
