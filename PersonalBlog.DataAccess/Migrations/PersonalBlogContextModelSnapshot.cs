@@ -53,6 +53,8 @@ namespace PersonalBlog.DataAccess.Migrations
                     b.Property<string>("Title")
                         .IsRequired();
 
+                    b.Property<double>("TrainedMeanRateValue");
+
                     b.HasKey("Id");
 
                     b.HasAlternateKey("Title");

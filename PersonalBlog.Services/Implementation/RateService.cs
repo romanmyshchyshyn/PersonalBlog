@@ -15,7 +15,7 @@ namespace PersonalBlog.Services.Implementation
     {
         public RateService(IUnitOfWork unitOfWork) :
             base(unitOfWork)
-        {
+        {            
         }        
 
         public override RateDto Get(string id)

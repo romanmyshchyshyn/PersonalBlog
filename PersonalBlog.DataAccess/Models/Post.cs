@@ -9,6 +9,7 @@ namespace PersonalBlog.DataAccess.Models
         public string Title { get; set; }
         public string Description { get; set; }
         public DateTime PostedOn { get; set; }
+        public double TrainedMeanRateValue { get; set; }
 
         public double[] Features { get; set; }
 

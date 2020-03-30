@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using PersonalBlog.DataAccess.Interfaces;
 using PersonalBlog.DataAccess.Models;
 using PersonalBlog.Services.Dto;
@@ -17,9 +18,12 @@ namespace PersonalBlog.Services.Implementation
 {
     public class UserService : Service<User, UserDto, UserFilter>, IUserService
     {
-        public UserService(IUnitOfWork unitOfWork) :
+        private IConfiguration _configuration;
+
+        public UserService(IUnitOfWork unitOfWork, IConfiguration configuration) :
             base(unitOfWork)
         {
+            _configuration = configuration;
         }
 
         public void Subscribe(bool action, string id)
@@ -99,6 +103,11 @@ namespace PersonalBlog.Services.Implementation
 
             dto.PasswordHash = UserHelper.GetPasswordHash(dto.Password);
             User entity = MapToEntity(dto);
+
+            var featuresNumber = int.Parse(_configuration["Data:FeaturesNumber"]);
+            entity.Weights = Enumerable.Repeat(0.0, featuresNumber)
+                .ToArray();
+
             Repository.Add(entity);
             _unitOfWork.SaveChanges();
         }

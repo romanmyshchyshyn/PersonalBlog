@@ -16,9 +16,12 @@ namespace PersonalBlog.Services.Implementation
 {
     public class PostService : Service<Post, PostDto, PostFilter>, IPostService
     {
-        public PostService(IUnitOfWork unitOfWork) :
+        private IRecommenderService _recommenderService;
+
+        public PostService(IUnitOfWork unitOfWork, IRecommenderService recommenderService) :
             base(unitOfWork)
         {
+            _recommenderService = recommenderService;
         }
 
         public override PostDto Get(string id)
@@ -78,21 +81,7 @@ namespace PersonalBlog.Services.Implementation
 
             if (postSearchOptions.SearchType == SearchType.Recommended)
             {
-                var userRepostiory = _unitOfWork.GetRepository<User>();
-                var userWeights = userRepostiory.Get(u => u.Id == postSearchOptions.UserId)
-                    .Select(u => u.Weights)
-                    .SingleOrDefault();
-
-                var notRatedByUserPosts = query.Where(p => p.Features.Any() && !p.Rates.Any(r => r.UserId == postSearchOptions.UserId))
-                    .Select(p => new { Id = p.Id, Features = p.Features })
-                    .ToList();
-
-                var recommendedPostsNumber = 10;
-                var recommendedPostsIds = notRatedByUserPosts.OrderByDescending(p => p.Features.Zip(userWeights, (f, w) => f * w).Sum())
-                    .Take(recommendedPostsNumber)
-                    .Select(p => p.Id)
-                    .ToList();
-
+                var recommendedPostsIds = _recommenderService.GetRecommendedPostsIds(query, postSearchOptions.UserId);
                 query = query.Where(p => recommendedPostsIds.Contains(p.Id));
             }
 

@@ -39,6 +39,7 @@ namespace PersonalBlog.Api
             services.AddScoped<IPostService, PostService>();
             services.AddScoped<IEmailService, EmailService>();
             services.AddScoped<IRateService, RateService>();
+            services.AddScoped<IRecommenderService, RecommenderService>();
 
             services.AddAuthentication(options =>
             {

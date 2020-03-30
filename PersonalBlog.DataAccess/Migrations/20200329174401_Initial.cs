@@ -15,6 +15,7 @@ namespace PersonalBlog.DataAccess.Migrations
                     Title = table.Column<string>(nullable: false),
                     Description = table.Column<string>(nullable: true),
                     PostedOn = table.Column<DateTime>(nullable: false),
+                    TrainedMeanRateValue = table.Column<double>(nullable: false),
                     Features = table.Column<string>(nullable: true)
                 },
                 constraints: table =>

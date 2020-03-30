@@ -10,7 +10,7 @@ using PersonalBlog.DataAccess;
 namespace PersonalBlog.DataAccess.Migrations
 {
     [DbContext(typeof(PersonalBlogContext))]
-    [Migration("20200322102811_Initial")]
+    [Migration("20200329174401_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -54,6 +54,8 @@ namespace PersonalBlog.DataAccess.Migrations
 
                     b.Property<string>("Title")
                         .IsRequired();
+
+                    b.Property<double>("TrainedMeanRateValue");
 
                     b.HasKey("Id");
 

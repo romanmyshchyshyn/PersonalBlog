@@ -25,9 +25,14 @@ namespace PersonalBlog.Api.Initializers
 
             var trainedDataPath = configuration["Data:TrainedDataPath"];
             var trainedDataReader = new MatFileReader(trainedDataPath);
+
             var featuresVariable = configuration["Data:TrainedDataFeaturesVariable"];
             var mlFeatures = trainedDataReader.Content[featuresVariable] as MLDouble;
             double[][] features = mlFeatures.GetArray();
+
+            var meanPostsRatesValuesVariable = configuration["Data:TrainedDataMeanPostsRatesValuesVariable"];
+            var mlMeanPostsRatesValues = trainedDataReader.Content[meanPostsRatesValuesVariable] as MLDouble;
+            double[][] meanPostsRatesValues = mlMeanPostsRatesValues.GetArray();
 
             var postsDataPath = configuration["Data:PostsPath"];
             var postsData = File.ReadAllLines(postsDataPath);
@@ -39,7 +44,8 @@ namespace PersonalBlog.Api.Initializers
                     Id = i.ToString(),
                     Title = postsData[i],
                     PostedOn = DateTime.Now,
-                    Features = features[i].ToArray()
+                    Features = features[i].ToArray(),
+                    TrainedMeanRateValue = meanPostsRatesValues[i][0]
                 };
 
                 posts.Add(post);
