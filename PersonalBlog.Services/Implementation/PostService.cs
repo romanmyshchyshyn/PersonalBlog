@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using PersonalBlog.DataAccess.Interfaces;
 using PersonalBlog.DataAccess.Models;
 using PersonalBlog.Services.Dto;
@@ -17,11 +18,13 @@ namespace PersonalBlog.Services.Implementation
     public class PostService : Service<Post, PostDto, PostFilter>, IPostService
     {
         private IRecommenderService _recommenderService;
+        private IConfiguration _configuration;
 
-        public PostService(IUnitOfWork unitOfWork, IRecommenderService recommenderService) :
+        public PostService(IUnitOfWork unitOfWork, IRecommenderService recommenderService, IConfiguration configuration):
             base(unitOfWork)
         {
             _recommenderService = recommenderService;
+            _configuration = configuration;
         }
 
         public override PostDto Get(string id)
@@ -145,6 +148,11 @@ namespace PersonalBlog.Services.Implementation
             }
 
             Post entity = MapToEntity(dto);
+
+            var featuresNumber = int.Parse(_configuration["Data:FeaturesNumber"]);
+            entity.Features = Enumerable.Repeat(0.0, featuresNumber)
+                .ToArray();
+
             Repository.Add(entity);
             _unitOfWork.SaveChanges();
         }
