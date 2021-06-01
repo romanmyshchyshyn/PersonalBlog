@@ -66,7 +66,7 @@ namespace PersonalBlog.Api.Controllers
         }
 
         [Authorize(Roles = Role.Admin)]
-        [HttpDelete]
+        [HttpDelete("{id}")]
         public override IActionResult Delete(string id)
         {
             return base.Delete(id);
